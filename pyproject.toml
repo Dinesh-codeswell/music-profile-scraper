@@ -17,5 +17,10 @@ dependencies = [
     "python-multipart>=0.0.9",
 ]
 
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["backend*"]
+exclude = ["frontend*", "public*", "tests*"]
+
 [tool.vercel]
 entrypoint = "backend.app:app"
