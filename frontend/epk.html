@@ -1,0 +1,1067 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Artist EPK &amp; Press One-Sheet — Artist Import Studio</title>
+  <meta name="description" content="Verified Electronic Press Kit (EPK) &amp; Industry One-Sheet auto-generated from streaming profiles." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <style>
+    /* Dedicated EPK & One-Sheet styling — Transform Design System */
+    :root {
+      --epk-violet: #340068;
+      --epk-magenta: #fb00c2;
+      --epk-orange: #ff1e00;
+      --epk-card-bg: #ffffff;
+      --epk-border: #000000;
+      --epk-text-muted: #555555;
+    }
+
+    body.epk-body {
+      background: #f4ede9;
+      color: #000000;
+      min-height: 100vh;
+      font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+      letter-spacing: -0.02em;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Top Action Bar (hidden in print) */
+    .epk-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #340068;
+      color: #ffffff;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      border-bottom: 2px solid #000000;
+      box-shadow: none;
+    }
+    .epk-brand-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .epk-brand-link svg { color: #fb00c2; }
+    .epk-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .epk-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border-radius: 0px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      cursor: pointer;
+      border: 2px solid #000000;
+      background: #f4ede9;
+      color: #000000;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      box-shadow: none;
+    }
+    .epk-btn:hover {
+      background: #ffffff;
+    }
+    .epk-btn-primary {
+      background: #fb00c2;
+      border-color: #000000;
+      color: #ffffff;
+    }
+    .epk-btn-primary:hover {
+      background: #d800a7;
+    }
+
+    /* Container */
+    .epk-container {
+      max-width: 1080px;
+      margin: 32px auto 60px;
+      padding: 0 20px;
+    }
+
+    /* Hero Press Banner */
+    .epk-hero {
+      background: var(--epk-card-bg);
+      border-radius: 0px;
+      border: 2px solid var(--epk-border);
+      overflow: hidden;
+      box-shadow: none;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .epk-banner-bg {
+      height: 180px;
+      background: #000000;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .epk-hero-content {
+      padding: 0 36px 32px;
+      position: relative;
+      margin-top: -60px;
+      display: flex;
+      gap: 28px;
+      align-items: flex-end;
+    }
+    .epk-avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 0px;
+      object-fit: cover;
+      background: #000000;
+      border: 3px solid #000000;
+      box-shadow: none;
+      flex-shrink: 0;
+    }
+    .epk-hero-info {
+      flex: 1;
+      padding-bottom: 4px;
+    }
+    .epk-hero-name-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .epk-artist-name {
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin: 0;
+      color: #000000;
+    }
+    .epk-badge-verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #1db954;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 50px;
+      border: 1px solid #000000;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .epk-tag-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .epk-pill {
+      background: #f4ede9;
+      color: #000000;
+      border: 1px solid #000000;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 50px;
+    }
+    .epk-pill-accent {
+      background: #340068;
+      color: #ffffff;
+      border: 1px solid #000000;
+    }
+    .epk-pill-fused {
+      background: #fb00c2;
+      color: #ffffff;
+      border: 1px solid #000000;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Executive One-Sheet Summary Banner */
+    .epk-summary-box {
+      margin-top: 18px;
+      padding: 16px 20px;
+      background: #ffffff;
+      border-radius: 0px;
+      border: 2px solid #000000;
+      border-left: 8px solid #fb00c2;
+      font-size: 15px;
+      line-height: 1.55;
+      color: #000000;
+    }
+    .epk-summary-box b {
+      color: #000000;
+      font-weight: 900;
+    }
+
+    /* Metrics Grid */
+    .epk-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .epk-metric-card {
+      background: var(--epk-card-bg);
+      border: 2px solid var(--epk-border);
+      border-radius: 0px;
+      padding: 20px 22px;
+      box-shadow: none;
+    }
+    .epk-metric-value {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #000000;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .epk-metric-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--epk-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Provenance / Fusion Notice */
+    .epk-fusion-band {
+      background: #d9d9d9;
+      border: 2px solid #000000;
+      border-radius: 0px;
+      padding: 12px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      color: #000000;
+    }
+    .epk-fusion-sources {
+      font-weight: 800;
+      color: #340068;
+    }
+
+    /* Main 2-Column Content */
+    .epk-grid {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .epk-card {
+      background: var(--epk-card-bg);
+      border: 2px solid var(--epk-border);
+      border-radius: 0px;
+      padding: 26px 28px;
+      margin-bottom: 24px;
+      box-shadow: none;
+    }
+    .epk-card-head {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #000000;
+      margin: 0 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #000000;
+      padding-bottom: 8px;
+    }
+    .epk-card-head .epk-tag {
+      font-size: 12px;
+      font-weight: 800;
+      background: #f4ede9;
+      color: #000000;
+      border: 1px solid #000000;
+      padding: 3px 10px;
+      border-radius: 50px;
+    }
+
+    /* Audio Tracks */
+    .epk-track-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 0px;
+      background: #f4ede9;
+      border: 1px solid #000000;
+      margin-bottom: 8px;
+      transition: background 0.15s;
+    }
+    .epk-track-row:hover { background: #ffffff; }
+    .epk-track-num {
+      font-size: 13px;
+      font-weight: 900;
+      color: #000000;
+      width: 18px;
+      text-align: center;
+    }
+    .epk-track-art {
+      width: 44px;
+      height: 44px;
+      border-radius: 0px;
+      border: 1px solid #000000;
+      object-fit: cover;
+      background: #d9d9d9;
+      flex-shrink: 0;
+    }
+    .epk-track-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .epk-track-title {
+      font-weight: 900;
+      font-size: 15px;
+      color: #000000;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .epk-track-meta {
+      font-size: 12px;
+      color: #555555;
+      margin-top: 2px;
+    }
+    .epk-audio-player {
+      width: 180px;
+      height: 32px;
+    }
+
+    /* Bio typography */
+    .epk-bio-text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #000000;
+      margin: 0;
+      white-space: pre-line;
+    }
+
+    /* Top Cities */
+    .epk-city-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #d9d9d9;
+      font-size: 14px;
+    }
+    .epk-city-item:last-child { border-bottom: none; }
+    .epk-city-name { font-weight: 800; color: #000000; }
+    .epk-city-listeners { color: #340068; font-weight: 800; }
+
+    /* Tour Dates */
+    .epk-tour-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 11px 0;
+      border-bottom: 1px solid #d9d9d9;
+    }
+    .epk-tour-item:last-child { border-bottom: none; }
+    .epk-tour-date {
+      font-weight: 900;
+      font-size: 12px;
+      background: #340068;
+      color: #ffffff;
+      border: 1px solid #000000;
+      padding: 6px 10px;
+      border-radius: 0px;
+      text-align: center;
+      min-width: 68px;
+    }
+    .epk-tour-venue { font-weight: 800; font-size: 14px; color: #000000; }
+    .epk-tour-city { font-size: 12px; color: #555555; }
+
+    /* Discography */
+    .epk-disco-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .epk-disco-card {
+      border-radius: 0px;
+      background: #f4ede9;
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #000000;
+    }
+    .epk-disco-art {
+      width: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 0px;
+      border: 1px solid #000000;
+      object-fit: cover;
+      margin-bottom: 8px;
+      background: #d9d9d9;
+    }
+    .epk-disco-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #000000;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .epk-disco-meta {
+      font-size: 11px;
+      color: #555555;
+    }
+
+    /* Contact Links */
+    .epk-link-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: #ffffff;
+      border: 1px solid #000000;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #000000;
+      text-decoration: none;
+      margin: 4px;
+      transition: all 0.15s;
+    }
+    .epk-link-pill:hover { background: #340068; color: #ffffff; }
+
+    /* Toast */
+    .epk-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #000000;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 0px;
+      border: 2px solid #fb00c2;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      box-shadow: none;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+    .epk-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Loading state */
+    .epk-loading {
+      text-align: center;
+      padding: 100px 20px;
+    }
+    .epk-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #000000;
+      border-top-color: #fb00c2;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ============================================================ PRINT STYLES (PDF ONE-SHEET) */
+    @media print {
+      body.epk-body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-size: 11pt !important;
+      }
+      .epk-topbar,
+      .epk-actions,
+      .epk-audio-player,
+      .no-print {
+        display: none !important;
+      }
+      .epk-container {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .epk-hero {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        page-break-inside: avoid;
+        margin-bottom: 15px !important;
+      }
+      .epk-banner-bg {
+        height: 100px !important;
+        background: #202838 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .epk-avatar {
+        width: 100px !important;
+        height: 100px !important;
+        margin-top: -50px !important;
+        border: 2px solid #fff !important;
+      }
+      .epk-artist-name {
+        font-size: 24pt !important;
+        color: #000 !important;
+      }
+      .epk-metrics-grid {
+        gap: 10px !important;
+        margin-bottom: 15px !important;
+        page-break-inside: avoid;
+      }
+      .epk-metric-card {
+        border: 1px solid #ccc !important;
+        padding: 10px !important;
+        box-shadow: none !important;
+      }
+      .epk-metric-value {
+        font-size: 18pt !important;
+        color: #000 !important;
+      }
+      .epk-card {
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+        padding: 14px 16px !important;
+        margin-bottom: 14px !important;
+        page-break-inside: avoid;
+      }
+      .epk-summary-box {
+        background: #f8f8f8 !important;
+        border-left: 3px solid #000 !important;
+        font-size: 10pt !important;
+      }
+      .epk-grid {
+        display: grid !important;
+        grid-template-columns: 1.6fr 1fr !important;
+        gap: 15px !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .epk-hero-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-top: -70px;
+        padding: 0 20px 24px;
+      }
+      .epk-hero-name-row {
+        justify-content: center;
+      }
+      .epk-tag-pills {
+        justify-content: center;
+      }
+      .epk-metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .epk-grid {
+        grid-template-columns: 1fr;
+      }
+      .epk-disco-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .epk-topbar {
+        padding: 0 16px;
+      }
+      .epk-btn-text {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body class="epk-body">
+
+  <!-- Top Action Navigation Bar -->
+  <header class="epk-topbar">
+    <a href="/" class="epk-brand-link" title="Back to Artist Import Studio">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      <span>Artist Import Studio</span>
+    </a>
+    <div class="epk-actions">
+      <button id="copy-epk-btn" class="epk-btn" title="Copy public shareable EPK link">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span class="epk-btn-text">Share EPK</span>
+      </button>
+      <button id="print-one-sheet-btn" class="epk-btn epk-btn-primary" title="Export as PDF / Print industry one-sheet">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span>Print One-Sheet (PDF)</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="epk-container">
+
+    <!-- Loading State -->
+    <div id="epk-loader" class="epk-loading">
+      <div class="epk-spinner"></div>
+      <p style="font-weight:600; color:#475569">Generating Electronic Press Kit (EPK)...</p>
+      <p style="font-size:13px; color:#94a3b8">Synthesizing streaming data and press assets</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="epk-error" class="epk-card" style="display:none; text-align:center; padding:48px 24px">
+      <h3 style="color:#ef4444; margin-top:0">EPK Unavailable</h3>
+      <p id="epk-error-msg" style="color:#64748b">No artist profile found or specified.</p>
+      <a href="/" class="epk-btn epk-btn-primary" style="margin-top:16px; display:inline-flex">Open Import Studio</a>
+    </div>
+
+    <!-- Main EPK View -->
+    <div id="epk-view" style="display:none">
+
+      <!-- Hero Header -->
+      <section class="epk-hero">
+        <div id="epk-banner" class="epk-banner-bg"></div>
+        <div class="epk-hero-content">
+          <img id="epk-avatar" class="epk-avatar" alt="Artist Profile" />
+          <div class="epk-hero-info">
+            <div class="epk-hero-name-row">
+              <h1 id="epk-artist-name" class="epk-artist-name">—</h1>
+              <span id="epk-verified-badge" class="epk-badge-verified">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Verified Artist
+              </span>
+            </div>
+            <div class="epk-tag-pills">
+              <span id="epk-genre-pill" class="epk-pill epk-pill-accent">Genre</span>
+              <span id="epk-region-pill" class="epk-pill">Global</span>
+              <span id="epk-fused-pill" class="epk-pill epk-pill-fused">⚡ Fused Data</span>
+            </div>
+            <div class="epk-summary-box">
+              <b id="epk-executive-tag">Executive Summary:</b> <span id="epk-summary-text">Live streaming metrics and discography.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Provenance Band -->
+      <div id="epk-provenance-band" class="epk-fusion-band">
+        <div>
+          <span><b>Data Provenance:</b> Real-time streaming ingestion synthesized from </span>
+          <span id="epk-sources-desc" class="epk-fusion-sources">Spotify + Apple Music</span>
+        </div>
+        <span style="font-size:11px; opacity:0.8">Zero API keys · Read-only public audit</span>
+      </div>
+
+      <!-- Metrics Bar -->
+      <div class="epk-metrics-grid">
+        <div class="epk-metric-card">
+          <div id="metric-listeners" class="epk-metric-value">—</div>
+          <div class="epk-metric-label">Monthly Listeners</div>
+        </div>
+        <div class="epk-metric-card">
+          <div id="metric-rank" class="epk-metric-value">—</div>
+          <div class="epk-metric-label">World Streaming Rank</div>
+        </div>
+        <div class="epk-metric-card">
+          <div id="metric-followers" class="epk-metric-value">—</div>
+          <div class="epk-metric-label">Followers</div>
+        </div>
+        <div class="epk-metric-card">
+          <div id="metric-topcity" class="epk-metric-value">—</div>
+          <div class="epk-metric-label">Top Audience Hub</div>
+        </div>
+      </div>
+
+      <!-- 2-Column Core Layout -->
+      <div class="epk-grid">
+
+        <!-- Left Column: Music & Bio -->
+        <div class="epk-col-left">
+
+          <!-- Featured Music Player -->
+          <div class="epk-card">
+            <h2 class="epk-card-head">
+              <span>Featured Music &amp; Audio Previews</span>
+              <span id="tracks-count-badge" class="epk-tag">Top Tracks</span>
+            </h2>
+            <div id="epk-tracks-list"></div>
+          </div>
+
+          <!-- Official Press Biography -->
+          <div class="epk-card">
+            <h2 class="epk-card-head">
+              <span>Official Press Biography</span>
+              <span class="epk-tag">Press Kit</span>
+            </h2>
+            <p id="epk-bio" class="epk-bio-text"></p>
+          </div>
+
+          <!-- Key Discography -->
+          <div class="epk-card">
+            <h2 class="epk-card-head">
+              <span>Key Discography</span>
+              <span id="disco-count-badge" class="epk-tag">Releases</span>
+            </h2>
+            <div id="epk-disco-grid" class="epk-disco-grid"></div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Stats, Audience, Shows & Booking -->
+        <div class="epk-col-right">
+
+          <!-- Audience Geography -->
+          <div class="epk-card">
+            <h2 class="epk-card-head">
+              <span>Where They Listen</span>
+              <span class="epk-tag">Top 5 Cities</span>
+            </h2>
+            <div id="epk-cities-list"></div>
+            <div id="epk-fan-map" style="height:220px; width:100%; border-radius:12px; margin-top:12px; border:1px solid #e2e8f0" class="no-print"></div>
+            <div id="epk-tour-insight" class="epk-summary-box" style="margin-top:12px; display:none; padding:10px 14px; font-size:12px"></div>
+          </div>
+
+          <!-- Upcoming Shows & Tour Dates -->
+          <div class="epk-card">
+            <h2 class="epk-card-head">
+              <span>Tour &amp; Live Performances</span>
+              <span id="tour-count-badge" class="epk-tag">Upcoming</span>
+            </h2>
+            <div id="epk-tour-list"></div>
+          </div>
+
+          <!-- Industry Contact & Booking -->
+          <div class="epk-card">
+            <h2 class="epk-card-head">
+              <span>Press &amp; Booking Contact</span>
+              <span class="epk-tag">Direct Inquiries</span>
+            </h2>
+            <p style="font-size:13px; color:#64748b; margin-top:0">
+              For live booking, sync licensing, festival submissions, and press interviews:
+            </p>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px; margin-bottom:14px">
+              <div style="font-size:11px; text-transform:uppercase; color:#94a3b8; font-weight:600">Booking Inquiries</div>
+              <div style="font-size:14px; font-weight:600; color:#0f172a; margin-top:2px">booking@artist-press.com</div>
+            </div>
+            <div id="epk-external-links" style="display:flex; flex-wrap:wrap; gap:6px"></div>
+          </div>
+
+          <!-- Press Assets -->
+          <div class="epk-card no-print">
+            <h2 class="epk-card-head">
+              <span>Press Assets</span>
+              <span class="epk-tag">Hi-Res Pack</span>
+            </h2>
+            <p style="font-size:13px; color:#64748b; margin-top:0">
+              Download approved master imagery for posters and publications.
+            </p>
+            <a id="download-press-btn" href="#" target="_blank" rel="noopener" class="epk-btn" style="width:100%; box-sizing:border-box; justify-content:center; background:#f1f5f9; color:#0f172a">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Download Master Press Photo</span>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="epk-toast" class="epk-toast">Link copied to clipboard!</div>
+
+  <script>
+    "use strict";
+
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    function fmt(n) {
+      if (n == null) return "—";
+      if (n >= 1e9) return (n / 1e9).toFixed(1) + "B";
+      if (n >= 1e6) return (n / 1e6).toFixed(1) + "M";
+      if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
+      return Number(n).toLocaleString();
+    }
+
+    function showToast(msg) {
+      const toast = $("epk-toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    // Determine target provider and id from path or query params
+    // Supported formats:
+    // /epk/spotify/4tZwfgrHOc3mvqYlEYSvVi
+    // /epk?provider=spotify&id=4tZwfgrHOc3mvqYlEYSvVi
+    function parseParams() {
+      const pathParts = window.location.pathname.split("/").filter(Boolean);
+      let provider = "spotify";
+      let id = "";
+
+      if (pathParts.length >= 3 && pathParts[0] === "epk") {
+        provider = pathParts[1];
+        id = pathParts[2];
+      } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        provider = urlParams.get("provider") || "spotify";
+        id = urlParams.get("id") || "";
+      }
+      return { provider, id };
+    }
+
+    async function loadEPK() {
+      const { provider, id } = parseParams();
+      if (!id) {
+        $("epk-loader").style.display = "none";
+        $("epk-error").style.display = "block";
+        $("epk-error-msg").innerHTML = 'No artist specified. <br><br>Try viewing an example: <br><a href="/epk/spotify/0tC995Rfn9k2l7nqgCZsV7" style="color:var(--epk-violet); font-weight:600">Prateek Kuhad (Spotify)</a> · <a href="/epk/apple/453523728" style="color:var(--epk-violet); font-weight:600">Prateek Kuhad (Apple Music)</a>';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/epk/${encodeURIComponent(provider)}/${encodeURIComponent(id)}?fuse=true`);
+        if (!res.ok) {
+          throw new Error(`Failed to load EPK (HTTP ${res.status})`);
+        }
+        const data = await res.json();
+        renderEPK(data);
+      } catch (err) {
+        $("epk-loader").style.display = "none";
+        $("epk-error").style.display = "block";
+        $("epk-error-msg").textContent = err.message;
+      }
+    }
+
+    function renderEPK(data) {
+      const { highlights, one_sheet_summary, press_bio, featured_tracks, discography, top_cities, tour_dates, press_assets, contact } = data;
+
+      document.title = `${highlights.name} — Electronic Press Kit (EPK)`;
+
+      // Hero
+      $("epk-artist-name").textContent = highlights.name;
+      $("epk-avatar").src = press_assets.avatar || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Crect fill='%231e293b' width='140' height='140'/%3E%3C/svg%3E";
+      if (press_assets.banner_images && press_assets.banner_images.length) {
+        $("epk-banner").style.backgroundImage = `url('${press_assets.banner_images[0].url}')`;
+      } else if (press_assets.avatar) {
+        $("epk-banner").style.backgroundImage = `url('${press_assets.avatar}')`;
+      }
+
+      // Genre, Region, Fused pills
+      $("epk-genre-pill").textContent = highlights.primary_genre || "Artist";
+      $("epk-region-pill").textContent = highlights.region ? highlights.region.toUpperCase() : "Global";
+      if (highlights.fused) {
+        $("epk-fused-pill").style.display = "inline-flex";
+        $("epk-fused-pill").textContent = "⚡ Fused (Spotify + Apple)";
+        const sources = highlights.fusion_sources || {};
+        $("epk-sources-desc").textContent = `Genres: ${sources.genres || 'Apple'} · Audience & Streams: ${sources.stats || 'Spotify'}`;
+      } else {
+        $("epk-fused-pill").textContent = highlights.provider;
+        $("epk-provenance-band").style.display = "none";
+      }
+
+      $("epk-summary-text").textContent = one_sheet_summary;
+
+      // Metrics
+      $("metric-listeners").textContent = fmt(highlights.monthly_listeners);
+      $("metric-rank").textContent = highlights.world_rank ? `#${fmt(highlights.world_rank)}` : "—";
+      $("metric-followers").textContent = fmt(highlights.followers);
+      $("metric-topcity").textContent = highlights.top_city || (top_cities.length ? top_cities[0].city : "—");
+
+      // Featured Tracks
+      $("tracks-count-badge").textContent = `${featured_tracks.length} Top Songs`;
+      if (featured_tracks.length) {
+        $("epk-tracks-list").innerHTML = featured_tracks.map((t, idx) => `
+          <div class="epk-track-row">
+            <span class="epk-track-num">${idx + 1}</span>
+            <img class="epk-track-art" src="${esc(t.image_url || press_assets.avatar || '')}" onerror="this.style.opacity='0.2'" alt="" />
+            <div class="epk-track-info">
+              <div class="epk-track-title">${esc(t.name)}</div>
+              <div class="epk-track-meta">${esc(t.album || 'Single')}${t.explicit ? ' · <b style="color:#ef4444">E</b>' : ''}</div>
+            </div>
+            ${t.preview_url ? `
+              <audio controls preload="none" class="epk-audio-player" src="${esc(t.preview_url)}"></audio>
+            ` : '<span style="font-size:11px; color:#94a3b8">Preview on Spotify</span>'}
+          </div>
+        `).join("");
+      } else {
+        $("epk-tracks-list").innerHTML = '<p style="color:#94a3b8; font-size:13px">No featured streaming tracks available.</p>';
+      }
+
+      // Bio
+      $("epk-bio").textContent = press_bio;
+
+      // Discography
+      $("disco-count-badge").textContent = `${discography.length} Releases`;
+      if (discography.length) {
+        $("epk-disco-grid").innerHTML = discography.slice(0, 6).map((a) => `
+          <div class="epk-disco-card">
+            <img class="epk-disco-art" src="${esc(a.image_url || press_assets.avatar || '')}" onerror="this.style.opacity='0.2'" alt="" />
+            <div class="epk-disco-title" title="${esc(a.name)}">${esc(a.name)}</div>
+            <div class="epk-disco-meta">${esc([a.type, a.year].filter(Boolean).join(" · ") || "Release")}</div>
+          </div>
+        `).join("");
+      } else {
+        $("epk-disco-grid").innerHTML = '<p style="color:#94a3b8; font-size:13px; grid-column:1/-1">No discography records returned.</p>';
+      }
+
+      // Top Cities
+      if (top_cities && top_cities.length) {
+        $("epk-cities-list").innerHTML = top_cities.map((c) => `
+          <div class="epk-city-item">
+            <span class="epk-city-name">${esc(c.city)}${c.country ? ', ' + esc(c.country) : ''}</span>
+            <span class="epk-city-listeners">${fmt(c.listeners)} listeners</span>
+          </div>
+        `).join("");
+      } else {
+        $("epk-cities-list").innerHTML = '<p style="color:#94a3b8; font-size:13px">City geographic metrics not exposed by this profile.</p>';
+      }
+
+      // Tour Dates
+      $("tour-count-badge").textContent = `${tour_dates.length} Dates`;
+      if (tour_dates && tour_dates.length) {
+        $("epk-tour-list").innerHTML = tour_dates.map((e) => `
+          <div class="epk-tour-item">
+            <div class="epk-tour-date">${esc(e.start_date || 'TBA')}</div>
+            <div>
+              <div class="epk-tour-venue">${esc(e.title)}</div>
+              <div class="epk-tour-city">${esc(e.city || 'Tour Venue')}</div>
+            </div>
+          </div>
+        `).join("");
+      } else {
+        $("epk-tour-list").innerHTML = '<p style="color:#94a3b8; font-size:13px">No upcoming public tour dates currently listed.</p>';
+      }
+
+      // External Links
+      const links = contact.external_links || [];
+      if (contact.streaming_url) links.unshift(contact.streaming_url);
+      if (links.length) {
+        $("epk-external-links").innerHTML = links.map((link) => {
+          let label = "Stream / Social";
+          if (link.includes("spotify")) label = "Spotify ↗";
+          else if (link.includes("apple")) label = "Apple Music ↗";
+          else if (link.includes("instagram")) label = "Instagram ↗";
+          else if (link.includes("twitter") || link.includes("x.com")) label = "Twitter / X ↗";
+          else if (link.includes("facebook")) label = "Facebook ↗";
+          else if (link.includes("wikipedia")) label = "Wikipedia ↗";
+          return `<a class="epk-link-pill" href="${esc(link)}" target="_blank" rel="noopener">${label}</a>`;
+        }).join("");
+      }
+
+      // Download press photo
+      if (press_assets.avatar) {
+        $("download-press-btn").href = press_assets.avatar;
+      }
+
+      // Load interactive audience map and tour routing
+      loadEPKMap(highlights.provider, highlights.id);
+
+      // Show EPK view
+      $("epk-loader").style.display = "none";
+      $("epk-view").style.display = "block";
+    }
+
+    async function loadEPKMap(provider, id) {
+      const mapDiv = $("epk-fan-map");
+      if (!mapDiv || typeof L === "undefined") return;
+
+      try {
+        const res = await fetch(`/api/geo/tour-analysis/${encodeURIComponent(provider)}/${encodeURIComponent(id)}`);
+        if (!res.ok) return;
+        const data = await res.json();
+
+        const insightBox = $("epk-tour-insight");
+        if (insightBox && data.insight_headline) {
+          insightBox.innerHTML = `<b>💡 Tour Opportunity:</b> ${esc(data.insight_headline)}. <span style="color:#64748b">${esc(data.insight_detail)}</span>`;
+          insightBox.style.display = "block";
+        }
+
+        const firstCity = (data.cities || []).find(c => c.lat != null && c.lon != null);
+        if (!firstCity) {
+          mapDiv.style.display = "none";
+          return;
+        }
+
+        const map = L.map(mapDiv, { scrollWheelZoom: false }).setView([firstCity.lat, firstCity.lon], 4);
+        L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+          attribution: '&copy; CartoDB',
+          maxZoom: 18,
+        }).addTo(map);
+
+        const bounds = [];
+        (data.cities || []).forEach(c => {
+          if (c.lat != null && c.lon != null) {
+            const latlng = [c.lat, c.lon];
+            bounds.push(latlng);
+            const r = Math.max(10, Math.min(26, Math.sqrt(c.listeners || 1000) / 18));
+            L.circleMarker(latlng, {
+              radius: r,
+              color: "#8c52ff",
+              weight: 2,
+              fillColor: "#8c52ff",
+              fillOpacity: 0.35,
+            }).addTo(map).bindPopup(`<b>${esc(c.city)}</b><br><span style="color:#8c52ff">${fmt(c.listeners)} listeners</span>`);
+          }
+        });
+
+        (data.events || []).forEach(ev => {
+          if (ev.lat != null && ev.lon != null) {
+            const latlng = [ev.lat, ev.lon];
+            bounds.push(latlng);
+            L.circleMarker(latlng, {
+              radius: 7,
+              color: "#10b981",
+              weight: 2,
+              fillColor: "#ffffff",
+              fillOpacity: 1,
+            }).addTo(map).bindPopup(`<b>${esc(ev.title)}</b><br>${esc(ev.city || '')}<br>${esc(ev.start_date || '')}`);
+          }
+        });
+
+        if (bounds.length > 1) {
+          map.fitBounds(bounds, { padding: [20, 20], maxZoom: 6 });
+        }
+        setTimeout(() => map.invalidateSize(), 300);
+      } catch (err) {
+        console.warn("EPK map load error:", err);
+      }
+    }
+
+    // Action buttons
+    $("copy-epk-btn").addEventListener("click", () => {
+      navigator.clipboard.writeText(window.location.href);
+      showToast("Public EPK link copied to clipboard!");
+    });
+
+    $("print-one-sheet-btn").addEventListener("click", () => {
+      window.print();
+    });
+
+    document.addEventListener("DOMContentLoaded", loadEPK);
+  </script>
+</body>
+</html>

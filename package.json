@@ -1,0 +1,16 @@
+{
+  "name": "artist-import-studio",
+  "version": "1.0.0",
+  "description": "Artist Import Studio — Spotify & Apple Music scraper and EPK preview dashboard",
+  "scripts": {
+    "dev": "uvicorn backend.app:app --reload --port 8000",
+    "start": "uvicorn backend.app:app --host 0.0.0.0 --port 8000"
+  },
+  "keywords": [
+    "music-tech",
+    "epk",
+    "spotify-scraper",
+    "apple-music",
+    "fastapi"
+  ]
+}

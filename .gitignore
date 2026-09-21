@@ -1,0 +1,60 @@
+# ==========================================
+# Artist Import Studio - .gitignore
+# ==========================================
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- Virtual Environments ---
+.venv/
+.venv-*/
+venv/
+env/
+ENV/
+.python-version
+
+# --- Environment & Secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- Vercel & Hosting ---
+.vercel/
+
+# --- Node / Dependencies (if any local tooling is used) ---
+node_modules/
+package-lock.json
+
+# --- Logs & Runtime ---
+*.log
+server.log
+*.pid
+
+# --- Operating System ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- IDE & Editors ---
+.idea/
+.vscode/
+*.swp
+*.swo
+.claude/
+.gemini/
+
+# --- Temp & Cache ---
+*.tmp
+*.bak
+~$*

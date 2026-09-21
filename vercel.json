@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "functions": {
+    "backend/app.py": {
+      "maxDuration": 60,
+      "includeFiles": "frontend/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/backend/app.py" },
+    { "source": "/assets/(.*)", "destination": "/frontend/$1" },
+    { "source": "/", "destination": "/frontend/index.html" },
+    { "source": "/filter", "destination": "/frontend/filter.html" },
+    { "source": "/csv-filter", "destination": "/frontend/filter.html" },
+    { "source": "/(.*)", "destination": "/backend/app.py" }
+  ]
+}
