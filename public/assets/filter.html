@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSV Filter Studio — Account Integrity &amp; Cohort Pipeline</title>
+  <meta name="description" content="Upload artist registration CSVs to purge spam, gambling keywords, bot farms, and business accounts into clean activation cohorts." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/styles.css" />
+  <style>
+    /* Standalone Filter Studio Custom Adjustments — Transform Theme */
+    .filter-standalone-shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+    .filter-hero {
+      padding: 48px 0 28px;
+    }
+    .filter-hero h1 {
+      font-size: clamp(32px, 4.5vw, var(--text-heading-lg));
+      font-weight: var(--font-weight-black);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .filter-hero-sub {
+      color: var(--color-ink-black);
+      font-size: var(--text-body);
+      line-height: var(--leading-body);
+      max-width: 720px;
+      margin-bottom: 24px;
+    }
+    .filter-stats-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .filter-stat-chip {
+      background: var(--color-paper-white);
+      border: 1px solid var(--color-ink-black);
+      border-radius: var(--radius-tags);
+      padding: 6px 16px;
+      font-size: var(--text-body-sm);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: -0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .filter-stat-chip b {
+      color: var(--color-festival-violet);
+      font-weight: var(--font-weight-black);
+    }
+    .standalone-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--color-paper-white);
+      font-weight: var(--font-weight-bold);
+      text-decoration: none;
+      font-size: var(--text-body-sm);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      transition: opacity 0.2s;
+    }
+    .standalone-nav-link:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- System Messaging Band -->
+  <div class="sys-band">
+    <span class="band-icon" aria-hidden="true">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+    </span>
+    <span><b>CSV Filter Studio</b></span>
+    <span class="band-sub">Account integrity &amp; bot detection pipeline · Standalone module</span>
+    <span class="band-arrow" aria-hidden="true">→</span>
+    <a href="/" class="standalone-nav-link" style="margin-left:auto; color:#ffffff; opacity:0.9">
+      ← Switch to Scraper Studio
+    </a>
+  </div>
+
+  <div class="filter-standalone-shell">
+    <!-- Header / Hero -->
+    <header class="filter-hero">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px">
+        <div>
+          <h1>CSV Filter Studio<span class="dot"></span></h1>
+          <p class="filter-hero-sub">
+            Upload user registration exports in CSV or Excel format. The multi-tier pipeline purges gambling spam, bot farms, non-artist business accounts, and dormant profiles — returning clean cohorts for onboarding and email campaigns.
+          </p>
+        </div>
+        <div>
+          <a href="/" class="pill-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            Artist Scraper Studio →
+          </a>
+        </div>
+      </div>
+
+      <div class="filter-stats-bar">
+        <div class="filter-stat-chip"><b>12</b> Multi-Tier Rules</div>
+        <div class="filter-stat-chip"><b>2</b> Cohort Tiers (Activation &amp; Completion)</div>
+        <div class="filter-stat-chip"><b>SSE</b> Real-time Profile Verification</div>
+        <div class="filter-stat-chip"><b>Zero</b> API Keys Required</div>
+      </div>
+    </header>
+
+    <!-- Main Filter Studio Card -->
+    <section class="card search-card" id="filter-card">
+      <div class="filter-upload-zone" id="upload-zone">
+        <div class="upload-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <path d="M17 8l-5-5-5 5"/>
+            <path d="M12 3v12"/>
+          </svg>
+        </div>
+        <p class="upload-text">Drag &amp; drop your artist registration file here, or click to browse</p>
+        <p class="upload-hint">Supported formats: CSV, Excel (.xlsx, .xls) — Expected columns: email, slug, name, created_date, country</p>
+        <input type="file" id="csv-file-input" accept=".csv,.xlsx,.xls" hidden />
+        <button id="upload-browse-btn" class="btn-violet" style="margin-top:14px">Choose File</button>
+      </div>
+
+      <!-- File Details -->
+      <div id="file-info" class="file-info" hidden>
+        <div class="file-info-row">
+          <span class="file-name" id="file-name-display">—</span>
+          <span class="file-size" id="file-size-display">—</span>
+          <button id="remove-file-btn" class="pill-btn" title="Remove file">✕ Remove</button>
+        </div>
+      </div>
+
+      <!-- Filter Controls & Options -->
+      <div class="filter-options" id="filter-options" hidden>
+        <div class="option-row">
+          <label>Registration Date Range (optional):</label>
+          <input type="date" id="date-start" class="date-input" />
+          <span class="option-sep">to</span>
+          <input type="date" id="date-end" class="date-input" />
+        </div>
+        <div class="option-row">
+          <label class="toggle-label">
+            <input type="checkbox" id="scrape-toggle" class="toggle-input" checked />
+            <span class="toggle-switch"></span>
+            <span class="toggle-text">Deep Profile Scrape <span class="toggle-note">(inspects artist story, tracks &amp; avatar — slower but eliminates deceptive business accounts)</span></span>
+          </label>
+        </div>
+        <div class="option-row" style="margin-top:16px">
+          <button id="run-filter-btn" class="btn-violet" disabled>Run Filter Pipeline</button>
+          <span class="filter-status" id="filter-status" style="margin-left:12px"></span>
+        </div>
+      </div>
+
+      <!-- Progress Indicators -->
+      <div id="filter-progress" class="filter-progress" hidden>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <p class="progress-text" id="progress-text">Processing...</p>
+        <div id="scrape-progress" class="scrape-progress" hidden>
+          <div class="scrape-stats">
+            <span id="scrape-count">0</span> / <span id="scrape-total">0</span> profiles verified
+            <span id="scrape-rate" class="scrape-rate"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Results -->
+      <div id="filter-results" class="filter-results" hidden>
+        <div class="results-summary">
+          <div class="summary-stat"><b id="stat-total">0</b><span>Total Evaluated</span></div>
+          <div class="summary-stat kept"><b id="stat-kept">0</b><span>Kept Artists</span></div>
+          <div class="summary-stat removed"><b id="stat-removed">0</b><span>Purged Records</span></div>
+          <div class="summary-stat c1"><b id="stat-c1">0</b><span>Cohort 1 (Activation)</span></div>
+          <div class="summary-stat c2"><b id="stat-c2">0</b><span>Cohort 2 (Completion)</span></div>
+        </div>
+
+        <div class="results-breakdown">
+          <h3>Removal Reasons Breakdown</h3>
+          <div id="reasons-list" class="reasons-list"></div>
+        </div>
+
+        <div class="results-tabs">
+          <button class="results-tab active" data-tab="kept">Kept Artists (<span id="tab-kept-count">0</span>)</button>
+          <button class="results-tab" data-tab="removed">Removed Records (<span id="tab-removed-count">0</span>)</button>
+        </div>
+
+        <div class="results-table-wrap">
+          <table class="results-table" id="results-table">
+            <thead id="results-thead"></thead>
+            <tbody id="results-tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="download-row">
+          <button id="download-csv-btn" class="btn-violet">Download Filtered CSV</button>
+          <button id="download-json-btn" class="pill-btn">Download Filtered JSON</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="foot" style="margin-top:60px">
+      <div class="foot-brand">
+        <h3>Artist Import Studio<span class="dot"></span></h3>
+        <p>CSV Filter Studio is an isolated module dedicated to account integrity and cohort cleanliness.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Modules</h4>
+        <a href="/">Artist Scraper Studio</a>
+        <a href="/filter">CSV Filter Studio</a>
+        <a href="/docs" target="_blank" rel="noopener">Interactive API Docs</a>
+      </div>
+      <div class="foot-col">
+        <h4>Pipeline Rules</h4>
+        <span>Gambling &amp; Adult keywords</span>
+        <span>Bot &amp; disposable email farms</span>
+        <span>Non-artist businesses</span>
+        <span>Dormant profile detection</span>
+      </div>
+    </footer>
+    <div class="foot-bottom" style="margin:12px 0 20px; display:flex; justify-content:space-between; font-size:11px; color:var(--color-muted-gray)">
+      <span>© 2026 Artist Import Studio</span>
+      <span>CSV Filter Module (Standalone)</span>
+    </div>
+  </div>
+
+  <script src="/assets/filter.js"></script>
+</body>
+</html>

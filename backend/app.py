@@ -402,37 +402,60 @@ def oembed_endpoint(url: str, format: str = "json", maxwidth: int = 480, maxheig
 
 # --- Static frontend, EPK & Embed routes -------------------------------------------
 
-if FRONTEND_DIR.exists():
-    app.mount("/assets", StaticFiles(directory=FRONTEND_DIR), name="assets")
+PUBLIC_DIR = Path(__file__).resolve().parent.parent / "public"
+STATIC_DIR = FRONTEND_DIR if (FRONTEND_DIR / "index.html").exists() else PUBLIC_DIR
+
+if STATIC_DIR.exists():
+    app.mount("/assets", StaticFiles(directory=STATIC_DIR), name="assets")
 
     @app.get("/", include_in_schema=False)
+    @app.get("/index.html", include_in_schema=False)
+    @app.get("/frontend/index.html", include_in_schema=False)
     def index() -> FileResponse:
-        return FileResponse(FRONTEND_DIR / "index.html")
+        return FileResponse(STATIC_DIR / "index.html")
 
     @app.get("/epk", include_in_schema=False)
     @app.get("/epk/{provider}/{obj_id}", include_in_schema=False)
     def epk_page(provider: Optional[str] = None, obj_id: Optional[str] = None) -> FileResponse:
-        epk_file = FRONTEND_DIR / "epk.html"
+        epk_file = STATIC_DIR / "epk.html"
         if epk_file.exists():
             return FileResponse(epk_file)
-        return FileResponse(FRONTEND_DIR / "index.html")
+        return FileResponse(STATIC_DIR / "index.html")
 
     @app.get("/embed", include_in_schema=False)
     @app.get("/embed/{provider}/{obj_id}", include_in_schema=False)
     def embed_page(provider: Optional[str] = None, obj_id: Optional[str] = None) -> FileResponse:
-        embed_file = FRONTEND_DIR / "embed.html"
+        embed_file = STATIC_DIR / "embed.html"
         if embed_file.exists():
             return FileResponse(embed_file)
-        return FileResponse(FRONTEND_DIR / "index.html")
+        return FileResponse(STATIC_DIR / "index.html")
 
     @app.get("/filter", include_in_schema=False)
     @app.get("/csv-filter", include_in_schema=False)
     @app.get("/filter-studio", include_in_schema=False)
     def filter_page() -> FileResponse:
-        filter_file = FRONTEND_DIR / "filter.html"
+        filter_file = STATIC_DIR / "filter.html"
         if filter_file.exists():
             return FileResponse(filter_file)
-        return FileResponse(FRONTEND_DIR / "index.html")
+        return FileResponse(STATIC_DIR / "index.html")
+
+    @app.get("/frontend/{file_path:path}", include_in_schema=False)
+    def frontend_fallback(file_path: str) -> FileResponse:
+        f = STATIC_DIR / file_path
+        if f.exists() and f.is_file():
+            return FileResponse(f)
+        raise HTTPException(status_code=404, detail="File not found")
+
+    @app.get("/favicon.ico", include_in_schema=False)
+    @app.get("/favicon.png", include_in_schema=False)
+    @app.get("/favicon.jpg", include_in_schema=False)
+    def favicon() -> FileResponse:
+        fav = PUBLIC_DIR / "favicon.jpg"
+        if not fav.exists():
+            fav = STATIC_DIR / "favicon.jpg"
+        if fav.exists():
+            return FileResponse(fav)
+        raise HTTPException(status_code=404, detail="Favicon not found")
 else:
     @app.get("/", include_in_schema=False)
     def index() -> dict[str, str]:
