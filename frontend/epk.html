@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Artist EPK &amp; Press One-Sheet — Artist Import Studio</title>
   <meta name="description" content="Verified Electronic Press Kit (EPK) &amp; Industry One-Sheet auto-generated from streaming profiles." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="stylesheet" href="/assets/device-preview.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <style>
@@ -596,6 +597,43 @@
         display: none;
       }
     }
+
+    @media (max-width: 480px) {
+      .epk-artist-name {
+        font-size: clamp(22px, 6.5vw, 30px);
+      }
+      .epk-avatar {
+        width: 90px;
+        height: 90px;
+        margin-top: -45px;
+      }
+      .epk-banner-bg {
+        height: 130px;
+      }
+      .epk-hero-content {
+        padding: 0 14px 18px;
+      }
+      .epk-metrics-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .epk-metric-card {
+        padding: 12px 10px;
+      }
+      .epk-metric-value {
+        font-size: 20px;
+      }
+      .epk-topbar {
+        padding: 0 10px;
+        height: 52px;
+      }
+      .epk-brand-link span {
+        display: none;
+      }
+      .epk-btn {
+        padding: 6px 10px;
+      }
+    }
   </style>
 </head>
 <body class="epk-body">
@@ -607,6 +645,10 @@
       <span>Artist Import Studio</span>
     </a>
     <div class="epk-actions">
+      <button id="epk-device-btn" class="epk-btn" title="Device Preview Simulator (Mobile, iPad, Laptop)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        <span class="epk-btn-text">Device Preview</span>
+      </button>
       <a id="smart-link-btn" class="epk-btn" href="#" target="_blank" rel="noopener" title="Open Fan Smart Link &amp; Bio Hub" style="display:none">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
         <span class="epk-btn-text">Smart Link ↗</span>
@@ -1072,7 +1114,26 @@
       window.print();
     });
 
+    $("epk-device-btn").addEventListener("click", () => {
+      const { provider, id } = parseParams();
+      if (window.DevicePreview) {
+        DevicePreview.open({ defaultTarget: "epk", provider, id });
+      }
+    });
+
+    // Auto-open simulator if ?preview=1 or ?preview=true
+    const epkParams = new URLSearchParams(window.location.search);
+    if (epkParams.get("preview") === "1" || epkParams.get("preview") === "true") {
+      setTimeout(() => {
+        const { provider, id } = parseParams();
+        if (window.DevicePreview) {
+          DevicePreview.open({ defaultTarget: "epk", provider, id });
+        }
+      }, 300);
+    }
+
     document.addEventListener("DOMContentLoaded", loadEPK);
   </script>
+  <script src="/assets/device-preview.js"></script>
 </body>
 </html>

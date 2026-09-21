@@ -132,6 +132,36 @@ class TestArtistImportStudioFeatures(unittest.TestCase):
         self.assertEqual(resp_alias.status_code, 200)
         self.assertIn("Artist Smart Link", resp_alias.text)
 
+    def test_device_preview_simulator_assets_and_integration(self):
+        """Test device preview simulator CSS and JS are served, and pages contain device simulation controls."""
+        resp_css = self.client.get("/assets/device-preview.css")
+        self.assertEqual(resp_css.status_code, 200)
+        self.assertIn("devprev-modal", resp_css.text)
+        self.assertIn("bezel-mobile", resp_css.text)
+
+        resp_js = self.client.get("/assets/device-preview.js")
+        self.assertEqual(resp_js.status_code, 200)
+        self.assertIn("DevicePreview", resp_js.text)
+        self.assertIn("iPhone 15", resp_js.text)
+        self.assertIn("iPad Air", resp_js.text)
+        self.assertIn("MacBook", resp_js.text)
+
+        resp_link = self.client.get("/link/spotify/0tC995Rfn9k2l7nqgCZsV7")
+        self.assertEqual(resp_link.status_code, 200)
+        self.assertIn('id="device-btn"', resp_link.text)
+        self.assertIn("device-preview.js", resp_link.text)
+        self.assertIn("viewport-fit=cover", resp_link.text)
+
+        resp_epk = self.client.get("/epk/spotify/0tC995Rfn9k2l7nqgCZsV7")
+        self.assertEqual(resp_epk.status_code, 200)
+        self.assertIn('id="epk-device-btn"', resp_epk.text)
+        self.assertIn("device-preview.js", resp_epk.text)
+
+        resp_home = self.client.get("/")
+        self.assertEqual(resp_home.status_code, 200)
+        self.assertIn('id="device-preview-btn"', resp_home.text)
+        self.assertIn("device-preview.js", resp_home.text)
+
 
 if __name__ == "__main__":
     unittest.main()

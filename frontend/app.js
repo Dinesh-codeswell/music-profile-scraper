@@ -178,6 +178,19 @@ $("apply-btn").addEventListener("click", async () => {
   } catch (err) { showError(err.message); }
 });
 
+const devPrevBtn = $("device-preview-btn");
+if (devPrevBtn) {
+  devPrevBtn.addEventListener("click", () => {
+    if (window.DevicePreview && current.id) {
+      DevicePreview.open({
+        defaultTarget: "link",
+        provider: current.provider,
+        id: current.id,
+      });
+    }
+  });
+}
+
 /* ---------- rendering ---------- */
 function render(p) {
   $("results").hidden = false;
@@ -229,6 +242,10 @@ function render(p) {
   if (smartlinkBtn) {
     smartlinkBtn.href = `/link/${encodeURIComponent(p.provider)}/${encodeURIComponent(p.id)}`;
     smartlinkBtn.style.display = "inline-flex";
+  }
+  const devPrevBtnEl = $("device-preview-btn");
+  if (devPrevBtnEl) {
+    devPrevBtnEl.style.display = "inline-flex";
   }
 
   $("stats-list").closest(".section").style.display = p.availability.stats ? "" : "none";

@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="stylesheet" href="/assets/device-preview.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 </head>
@@ -126,6 +127,8 @@
               <div class="artist-actions-toolbar">
                 <button id="fuse-btn" class="action-btn action-btn-primary">⚡ Fuse Profile</button>
                 <a id="epk-btn" class="action-btn action-btn-secondary" href="#" target="_blank" rel="noopener">📄 View Public EPK ↗</a>
+                <a id="smartlink-btn" class="action-btn action-btn-outline" href="#" target="_blank" rel="noopener" style="display:none">🔗 Smart Link ↗</a>
+                <button id="device-preview-btn" class="action-btn action-btn-outline" style="display:none">📱 Device Preview</button>
                 <button id="refresh-btn" class="action-btn action-btn-outline">↻ Refresh</button>
                 <button id="embed-btn" class="action-btn action-btn-outline"><b>&lt;/&gt;</b> Embed</button>
               </div>
@@ -470,6 +473,7 @@
     </main>
   </div>
 
+  <script src="/assets/device-preview.js"></script>
   <script src="/assets/app.js"></script>
 </body>
 </html>

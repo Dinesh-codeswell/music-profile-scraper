@@ -1,0 +1,478 @@
+/* ==========================================================================
+   Multi-Device Live Preview Studio — Transform Design System
+   Accurate 1:1 Viewport Simulator for Mobile, iPad/Tablet, Laptop & Desktop
+   ========================================================================== */
+
+/* Fullscreen Modal Backdrop */
+.devprev-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(18, 9, 28, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.devprev-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Studio Header / Control Bar */
+.devprev-header {
+  background: #000000;
+  border-bottom: 2px solid #340068;
+  padding: 10px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.devprev-left-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.devprev-title-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #340068;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 50px;
+  border: 1px solid #fb00c2;
+  letter-spacing: 0.05em;
+}
+
+/* Page Target Selector */
+.devprev-targets {
+  display: inline-flex;
+  background: #180d26;
+  border: 1.5px solid #340068;
+  padding: 3px;
+  border-radius: 0px;
+}
+
+.devprev-target-btn {
+  background: transparent;
+  border: none;
+  color: #a49bb3;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-radius: 0px;
+}
+
+.devprev-target-btn:hover {
+  color: #ffffff;
+}
+
+.devprev-target-btn.active {
+  background: #fb00c2;
+  color: #ffffff;
+}
+
+/* Device Preset Selector */
+.devprev-devices {
+  display: inline-flex;
+  background: #180d26;
+  border: 1.5px solid #340068;
+  padding: 3px;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.devprev-device-btn {
+  background: transparent;
+  border: none;
+  color: #d9d9d9;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 0px;
+}
+
+.devprev-device-btn:hover {
+  background: rgba(251, 0, 194, 0.2);
+  color: #ffffff;
+}
+
+.devprev-device-btn.active {
+  background: #340068;
+  color: #ffffff;
+  border-bottom: 2px solid #fb00c2;
+}
+
+/* Action Controls (Rotate, Zoom, Bezel, Close) */
+.devprev-right-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.devprev-btn {
+  background: #180d26;
+  border: 1.5px solid #340068;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 6px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+  border-radius: 0px;
+}
+
+.devprev-btn:hover {
+  background: #340068;
+  border-color: #fb00c2;
+}
+
+.devprev-btn.active {
+  background: #fb00c2;
+  border-color: #ffffff;
+}
+
+.devprev-btn-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+.devprev-scale-select {
+  background: #180d26;
+  border: 1.5px solid #340068;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 0px;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.devprev-close-btn {
+  background: #ff1e00;
+  border: 1.5px solid #ffffff;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  padding: 6px 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  border-radius: 0px;
+  transition: background 0.15s;
+}
+
+.devprev-close-btn:hover {
+  background: #cc1800;
+}
+
+/* Live Viewport Info Status Bar */
+.devprev-status-bar {
+  background: #12091c;
+  border-bottom: 1px solid #2c1a42;
+  padding: 6px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #a49bb3;
+  flex-shrink: 0;
+}
+
+.devprev-status-badge {
+  color: #fb00c2;
+  font-weight: 800;
+}
+
+.devprev-external-links {
+  display: flex;
+  gap: 16px;
+}
+
+.devprev-external-links a,
+.devprev-external-links button {
+  color: #ffffff;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0;
+}
+
+.devprev-external-links button:hover,
+.devprev-external-links a:hover {
+  color: #fb00c2;
+}
+
+/* Viewport Stage / Canvas Area */
+.devprev-stage {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 30px 20px 60px;
+  position: relative;
+  background: radial-gradient(circle at center, #1b0d2d 0%, #0d0617 100%);
+  background-size: cover;
+}
+
+/* Scale & Orientation Wrapper */
+.devprev-device-wrap {
+  position: relative;
+  transition: width 0.25s ease, height 0.25s ease, transform 0.2s ease;
+  transform-origin: top center;
+  display: flex;
+  justify-content: center;
+}
+
+/* Device Shells */
+.devprev-frame {
+  position: relative;
+  background: #000000;
+  box-shadow: 0 25px 65px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: all 0.25s ease;
+  box-sizing: content-box;
+}
+
+/* Iframe Window */
+.devprev-iframe-wrap {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  background: #ffffff;
+}
+
+.devprev-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  background: #ffffff;
+}
+
+/* --- HARDWARE BEZEL STYLES --- */
+
+/* 1. Mobile (iPhone 15 Flagship Style) */
+.devprev-frame.bezel-mobile {
+  border: 12px solid #1c1c1e;
+  border-radius: 46px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 0 2px #3a3a3c;
+}
+
+.devprev-frame.bezel-mobile .devprev-iframe-wrap {
+  border-radius: 34px;
+}
+
+/* Dynamic Island */
+.devprev-frame.bezel-mobile .devprev-notch {
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 24px;
+  background: #000000;
+  border-radius: 20px;
+  z-index: 20;
+  pointer-events: none;
+  box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Home Indicator Bar */
+.devprev-frame.bezel-mobile .devprev-home-bar {
+  display: block;
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 4px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* 2. Tablet / iPad (iPad 10th Gen Style) */
+.devprev-frame.bezel-tablet {
+  border: 16px solid #242426;
+  border-radius: 28px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 0 2px #3c3c3e;
+}
+
+.devprev-frame.bezel-tablet .devprev-iframe-wrap {
+  border-radius: 14px;
+}
+
+.devprev-frame.bezel-tablet .devprev-notch {
+  display: block;
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: #050505;
+  border-radius: 50%;
+  z-index: 20;
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.devprev-frame.bezel-tablet .devprev-home-bar {
+  display: none;
+}
+
+/* 3. Laptop (MacBook 13" Style) */
+.devprev-frame.bezel-laptop {
+  border: 12px solid #1a1a1c;
+  border-bottom: 16px solid #1a1a1c;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+}
+
+.devprev-frame.bezel-laptop .devprev-iframe-wrap {
+  border-radius: 4px;
+}
+
+.devprev-frame.bezel-laptop .devprev-notch {
+  display: block;
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: #050505;
+  border-radius: 50%;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.devprev-frame.bezel-laptop .devprev-laptop-base {
+  display: block;
+  width: calc(100% + 40px);
+  height: 12px;
+  background: #2a2a2c;
+  border-radius: 0 0 8px 8px;
+  margin: 0 -20px;
+  position: relative;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.8);
+}
+
+.devprev-frame.bezel-laptop .devprev-laptop-notch {
+  width: 120px;
+  height: 4px;
+  background: #111112;
+  border-radius: 0 0 4px 4px;
+  margin: 0 auto;
+}
+
+/* 4. Desktop Monitor */
+.devprev-frame.bezel-desktop {
+  border: 14px solid #111111;
+  border-radius: 6px 6px 0 0;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+}
+
+.devprev-frame.bezel-desktop .devprev-iframe-wrap {
+  border-radius: 0px;
+}
+
+.devprev-frame.bezel-desktop .devprev-desktop-stand {
+  display: block;
+  width: 140px;
+  height: 40px;
+  background: linear-gradient(180deg, #444446 0%, #2a2a2c 100%);
+  margin: 0 auto;
+}
+
+.devprev-frame.bezel-desktop .devprev-desktop-base {
+  display: block;
+  width: 280px;
+  height: 8px;
+  background: #3a3a3c;
+  border-radius: 4px;
+  margin: 0 auto;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.6);
+}
+
+/* 5. Frameless / Clean Viewport Mode */
+.devprev-frame.bezel-none {
+  border: 2px solid #fb00c2;
+  border-radius: 0px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+}
+
+.devprev-frame.bezel-none .devprev-iframe-wrap {
+  border-radius: 0px;
+}
+
+.devprev-frame.bezel-none .devprev-notch,
+.devprev-frame.bezel-none .devprev-home-bar,
+.devprev-frame.bezel-none .devprev-laptop-base,
+.devprev-frame.bezel-none .devprev-desktop-stand,
+.devprev-frame.bezel-none .devprev-desktop-base {
+  display: none !important;
+}
+
+/* Responsive Bar on Small User Displays */
+@media (max-width: 860px) {
+  .devprev-header {
+    padding: 8px 12px;
+  }
+  .devprev-devices {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .devprev-device-btn {
+    white-space: nowrap;
+  }
+}
