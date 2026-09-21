@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Artist Smart Link &amp; Bio Hub — Artist Import Studio</title>
+  <meta name="description" content="Official streaming gateway, 30s audio previews, social channels, and tour dates." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --link-canvas: #f4ede9;
+      --link-card: #ffffff;
+      --link-ink: #000000;
+      --link-violet: #340068;
+      --link-magenta: #fb00c2;
+      --link-gray: #767676;
+      --link-ash: #d9d9d9;
+      --link-border: #000000;
+    }
+
+    body.dark {
+      --link-canvas: #12091c;
+      --link-card: #1f1130;
+      --link-ink: #ffffff;
+      --link-violet: #fb00c2;
+      --link-gray: #a49bb3;
+      --link-ash: #2c1a42;
+      --link-border: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--link-canvas);
+      color: var(--link-ink);
+      font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+      letter-spacing: -0.02em;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 60px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    /* Top Controls */
+    .top-controls {
+      width: 100%;
+      max-width: 460px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--link-card);
+      border: 2px solid var(--link-border);
+      color: var(--link-ink);
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .back-btn:hover {
+      background: var(--link-ink);
+      color: var(--link-card);
+    }
+
+    .ctrl-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      background: var(--link-card);
+      border: 2px solid var(--link-border);
+      color: var(--link-ink);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      border-radius: 0px;
+      transition: all 0.15s ease;
+    }
+
+    .icon-btn:hover {
+      background: var(--link-ink);
+      color: var(--link-card);
+    }
+
+    .icon-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+    }
+
+    /* Main Bio Container */
+    .hub-card {
+      width: 100%;
+      max-width: 460px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* Avatar Header */
+    .avatar-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .artist-avatar {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border: 3px solid var(--link-border);
+      background: var(--link-ash);
+      display: block;
+    }
+
+    .provider-pill {
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1db954;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 10px;
+      border-radius: 50px;
+      border: 1.5px solid var(--link-border);
+      white-space: nowrap;
+    }
+
+    .provider-pill.apple { background: #fa243c; }
+    .provider-pill.fused { background: var(--link-magenta); }
+
+    .artist-name {
+      font-size: 28px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+
+    .artist-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .tag-pill {
+      background: var(--link-card);
+      border: 1.5px solid var(--link-border);
+      color: var(--link-ink);
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .tag-pill.stat {
+      background: var(--link-violet);
+      color: #ffffff;
+      border-color: var(--link-border);
+    }
+
+    .artist-bio-blurb {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--link-gray);
+      margin-bottom: 24px;
+      max-width: 380px;
+    }
+
+    /* 30s Audio Preview Module */
+    .preview-box {
+      width: 100%;
+      background: var(--link-card);
+      border: 2px solid var(--link-border);
+      padding: 16px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .track-thumb {
+      width: 48px;
+      height: 48px;
+      border: 1.5px solid var(--link-border);
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--link-ash);
+    }
+
+    .track-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .track-title {
+      font-weight: 900;
+      font-size: 15px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--link-ink);
+    }
+
+    .track-sub {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--link-gray);
+      margin-top: 2px;
+    }
+
+    .play-circle-btn {
+      width: 42px;
+      height: 42px;
+      background: var(--link-magenta);
+      border: 2px solid var(--link-border);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.15s ease;
+    }
+
+    .play-circle-btn:hover {
+      transform: scale(1.06);
+    }
+
+    .play-circle-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* Progress bar */
+    .scrubber-wrap {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-bar-bg {
+      flex: 1;
+      height: 6px;
+      background: var(--link-ash);
+      border: 1px solid var(--link-border);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--link-magenta);
+      transition: width 0.1s linear;
+    }
+
+    .time-label {
+      font-size: 11px;
+      font-weight: 800;
+      font-family: monospace;
+      color: var(--link-gray);
+      min-width: 28px;
+      text-align: right;
+    }
+
+    /* Smart Gateway Action Buttons */
+    .links-stack {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .smart-link-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: 52px;
+      padding: 0 18px;
+      background: var(--link-card);
+      border: 2px solid var(--link-border);
+      color: var(--link-ink);
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      transition: all 0.15s ease;
+    }
+
+    .smart-link-item:hover {
+      background: var(--link-ink);
+      color: var(--link-card);
+      transform: translateY(-2px);
+    }
+
+    .smart-link-item.featured {
+      background: var(--link-violet);
+      color: #ffffff;
+      border-color: var(--link-border);
+    }
+
+    .smart-link-item.featured:hover {
+      background: var(--link-magenta);
+      color: #ffffff;
+    }
+
+    .link-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .link-icon {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .link-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .link-arrow {
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    /* Live Tour Dates Section */
+    .section-title {
+      width: 100%;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--link-gray);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tour-stack {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .tour-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--link-card);
+      border: 2px solid var(--link-border);
+      padding: 12px 16px;
+      text-align: left;
+    }
+
+    .tour-date-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--link-ash);
+      border: 1.5px solid var(--link-border);
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      font-weight: 900;
+      margin-right: 12px;
+    }
+
+    .tour-date-badge .day {
+      font-size: 16px;
+      line-height: 1;
+      color: var(--link-ink);
+    }
+
+    .tour-date-badge .mon {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: var(--link-gray);
+    }
+
+    .tour-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .tour-city {
+      font-weight: 900;
+      font-size: 14px;
+      text-transform: uppercase;
+      color: var(--link-ink);
+    }
+
+    .tour-venue {
+      font-size: 12px;
+      color: var(--link-gray);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tour-btn {
+      background: var(--link-magenta);
+      color: #ffffff;
+      border: 1.5px solid var(--link-border);
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .tour-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Discography Grid */
+    .disco-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .disco-card {
+      background: var(--link-card);
+      border: 2px solid var(--link-border);
+      padding: 10px;
+      text-align: left;
+      text-decoration: none;
+      color: var(--link-ink);
+      transition: transform 0.15s ease;
+    }
+
+    .disco-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .disco-img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border: 1px solid var(--link-border);
+      display: block;
+      margin-bottom: 8px;
+      background: var(--link-ash);
+    }
+
+    .disco-name {
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+    }
+
+    .disco-year {
+      font-size: 11px;
+      color: var(--link-gray);
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    /* Footer */
+    .hub-footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--link-gray);
+    }
+
+    .hub-footer a {
+      color: var(--link-ink);
+      font-weight: 900;
+      text-decoration: underline;
+    }
+
+    /* Modal / Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      background: #000000;
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .qr-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: grid;
+      place-items: center;
+      z-index: 99;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      padding: 16px;
+    }
+
+    .qr-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .qr-box {
+      background: #ffffff;
+      border: 3px solid #000000;
+      padding: 28px;
+      text-align: center;
+      max-width: 320px;
+      width: 100%;
+    }
+
+    .qr-box h3 {
+      font-size: 18px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #000000;
+      margin-bottom: 16px;
+    }
+
+    .qr-box img {
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 16px;
+      display: block;
+      border: 1px solid #000000;
+    }
+
+    .close-modal-btn {
+      width: 100%;
+      height: 40px;
+      background: #000000;
+      color: #ffffff;
+      border: 0;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Action Controls -->
+  <div class="top-controls">
+    <a id="home-link" href="/" class="back-btn">← Studio</a>
+    <div class="ctrl-btns">
+      <button id="qr-btn" class="icon-btn" title="Scan QR Code" aria-label="Scan QR Code">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="8" x="3" y="3" rx="1"/><rect width="8" height="8" x="13" y="3" rx="1"/><rect width="8" height="8" x="3" y="13" rx="1"/><rect width="4" height="4" x="14" y="14" rx="1"/></svg>
+      </button>
+      <button id="share-btn" class="icon-btn" title="Copy Link" aria-label="Copy Link">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
+      </button>
+      <button id="theme-btn" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <main class="hub-card">
+    <!-- Header -->
+    <div class="avatar-wrap">
+      <img id="artist-avatar" class="artist-avatar" src="" alt="" />
+      <span id="provider-pill" class="provider-pill">SPOTIFY</span>
+    </div>
+
+    <h1 id="artist-name" class="artist-name">—</h1>
+
+    <div class="artist-tags" id="artist-tags">
+      <span id="genre-pill" class="tag-pill">MUSIC</span>
+      <span id="reach-pill" class="tag-pill stat">LISTENERS</span>
+    </div>
+
+    <p id="artist-bio" class="artist-bio-blurb"></p>
+
+    <!-- 30s Audio Preview Module -->
+    <div id="preview-module" class="preview-box" style="display:none">
+      <div class="preview-header">
+        <img id="track-thumb" class="track-thumb" src="" alt="" />
+        <div class="track-meta">
+          <div id="track-title" class="track-title">—</div>
+          <div id="track-sub" class="track-sub">30s Streaming Preview</div>
+        </div>
+        <button id="play-btn" class="play-circle-btn" aria-label="Play preview">
+          <svg id="play-icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <svg id="pause-icon" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        </button>
+      </div>
+      <div class="scrubber-wrap">
+        <div id="scrubber" class="progress-bar-bg">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+        <span id="time-label" class="time-label">0:00</span>
+      </div>
+      <audio id="audio-el" preload="none"></audio>
+    </div>
+
+    <!-- Smart Links Stack -->
+    <div class="links-stack" id="links-stack">
+      <!-- Generated dynamically -->
+    </div>
+
+    <!-- Live Tour Dates -->
+    <div id="tour-section" style="width:100%; display:none">
+      <div class="section-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+        Upcoming Concerts
+      </div>
+      <div class="tour-stack" id="tour-stack"></div>
+    </div>
+
+    <!-- Latest Releases -->
+    <div id="disco-section" style="width:100%; display:none">
+      <div class="section-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+        Discography &amp; Releases
+      </div>
+      <div class="disco-grid" id="disco-grid"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="hub-footer">
+      Powered by <a href="/">Artist Import Studio</a> · Direct Music Intelligence
+    </footer>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Link copied to clipboard!</div>
+
+  <!-- QR Code Modal -->
+  <div id="qr-modal" class="qr-modal">
+    <div class="qr-box">
+      <h3 id="qr-artist-name">Scan to Listen</h3>
+      <img id="qr-img" src="" alt="QR Code" />
+      <button id="close-qr" class="close-modal-btn">Close</button>
+    </div>
+  </div>
+
+  <script>
+    "use strict";
+
+    const $ = (id) => document.getElementById(id);
+
+    function showToast(msg) {
+      const t = $("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2500);
+    }
+
+    function fmtNumber(n) {
+      if (!n) return "0";
+      if (n >= 1e6) return (n / 1e6).toFixed(1) + "M";
+      if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
+      return String(n);
+    }
+
+    // Determine provider & id from URL: /link/{provider}/{id} or ?provider=...&id=...
+    const pathParts = window.location.pathname.split("/").filter(Boolean);
+    const searchParams = new URLSearchParams(window.location.search);
+    let provider = searchParams.get("provider") || "spotify";
+    let artistId = searchParams.get("id") || "";
+
+    if (!artistId) {
+      for (let i = 0; i < pathParts.length; i++) {
+        if (["link", "smart-link"].includes(pathParts[i]) && pathParts[i+1]) {
+          provider = pathParts[i+1];
+          artistId = pathParts[i+2] || "";
+          break;
+        }
+      }
+
+      if (!artistId && pathParts.length >= 2) {
+        provider = pathParts[0];
+        artistId = pathParts[1];
+      }
+    }
+
+    // Default fallback sample if empty
+    if (!artistId) {
+      artistId = "0tC995Rfn9k2l7nqgCZsV7";
+      provider = "spotify";
+    }
+
+    // Brand Icons SVGs
+    const ICONS = {
+      spotify: `<svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.5 17.3c-.2.4-.7.5-1.1.3-3-1.9-6.8-2.3-11.3-1.3-.5.1-.9-.2-1-.7-.1-.5.2-.9.7-1 5.1-1.1 9.4-.6 12.8 1.6.3.2.5.7.1 1.1zm1.5-3.3c-.3.5-.9.6-1.4.3-3.4-2.1-8.6-2.7-12.7-1.5-.5.2-1.1-.1-1.3-.6-.2-.5.1-1.1.6-1.3 4.8-1.4 10.6-.7 14.5 1.7.5.3.7.9.3 1.4zm.1-3.4C15.1 8 8.6 7.8 4.7 8.9c-.6.2-1.2-.2-1.4-.8-.2-.6.2-1.2.8-1.4 4.5-1.3 11.8-1 16.5 1.6.5.3.7 1 .4 1.5-.3.5-.9.7-1.4.3z"/></svg>`,
+      apple: `<svg viewBox="0 0 24 24"><path d="M16.4 12.8c0-2.4 2-3.5 2.1-3.6-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-2-.9-3.3-.9-1.7 0-3.2 1-4.1 2.5-1.7 3-.4 7.4 1.3 9.8.8 1.2 1.8 2.6 3.1 2.5 1.2-.1 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8-.1-.1-2.6-1-2.6-3.1zM14 5.5c.7-.8 1.1-1.9 1-3-1-.1-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.5z"/></svg>`,
+      youtube: `<svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
+      instagram: `<svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`,
+      website: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" x2="22" y1="12" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+      epk: `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`
+    };
+
+    async function loadSmartLink() {
+      try {
+        const res = await fetch(`/api/import/${encodeURIComponent(provider)}/${encodeURIComponent(artistId)}`);
+        if (!res.ok) throw new Error("Artist not found");
+        const p = await res.json();
+        renderHub(p);
+      } catch (e) {
+        $("artist-name").textContent = "Artist Not Found";
+        $("artist-bio").textContent = "Unable to load streaming profile links.";
+      }
+    }
+
+    function renderHub(p) {
+      document.title = `${p.name} — Smart Link &amp; Bio Hub`;
+      $("artist-name").textContent = p.name;
+      $("artist-avatar").src = p.image_url || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23d9d9d9' width='120' height='120'/%3E%3C/svg%3E";
+      $("artist-avatar").alt = p.name;
+
+      // Provider badge
+      const provBadge = $("provider-pill");
+      provBadge.textContent = p.fused ? "⚡ FUSED" : (p.provider === "apple" ? "APPLE MUSIC" : "SPOTIFY");
+      provBadge.className = `provider-pill ${p.fused ? "fused" : p.provider}`;
+
+      // Genre & listener tags
+      const genre = p.genres && p.genres.length ? p.genres[0] : (p.provider === "spotify" ? "VERIFIED ARTIST" : "FEATURED");
+      $("genre-pill").textContent = genre;
+
+      const listeners = (p.stats && p.stats.monthly_listeners) ? `${fmtNumber(p.stats.monthly_listeners)} LISTENERS` : (p.stats && p.stats.followers ? `${fmtNumber(p.stats.followers)} FOLLOWERS` : "VERIFIED");
+      $("reach-pill").textContent = listeners;
+
+      // Bio excerpt
+      if (p.biography) {
+        const cleanBio = p.biography.replace(/<[^>]*>?/gm, "").slice(0, 140);
+        $("artist-bio").textContent = cleanBio + (p.biography.length > 140 ? "…" : "");
+      } else {
+        $("artist-bio").textContent = `Official gateway for ${p.name}. Stream music, follow on social platforms, and explore live dates.`;
+      }
+
+      // Audio Preview
+      const previewTrack = (p.top_tracks || []).find(t => t.preview_url);
+      if (previewTrack) {
+        $("preview-module").style.display = "block";
+        $("track-title").textContent = previewTrack.name;
+        $("track-sub").textContent = `${previewTrack.album_name || 'Popular Release'} · 30s Preview`;
+        if (previewTrack.image_url) {
+          $("track-thumb").src = previewTrack.image_url;
+        } else {
+          $("track-thumb").src = p.image_url;
+        }
+        setupAudio(previewTrack.preview_url);
+      }
+
+      // Links Stack
+      const stack = $("links-stack");
+      stack.innerHTML = "";
+
+      // 1. Spotify
+      const spotifyUrl = p.provider === "spotify" ? p.url : `https://open.spotify.com/search/${encodeURIComponent(p.name)}`;
+      stack.appendChild(createLinkBtn("Listen on Spotify", spotifyUrl, ICONS.spotify, true));
+
+      // 2. Apple Music
+      const appleUrl = p.provider === "apple" ? p.url : `https://music.apple.com/us/search?term=${encodeURIComponent(p.name)}`;
+      stack.appendChild(createLinkBtn("Listen on Apple Music", appleUrl, ICONS.apple, false));
+
+      // 3. EPK One-Sheet
+      stack.appendChild(createLinkBtn("Press Kit & Industry One-Sheet", `/epk/${p.provider}/${p.id}`, ICONS.epk, false));
+
+      // 4. External social links
+      (p.external_links || []).forEach(url => {
+        let label = "External Link";
+        let icon = ICONS.website;
+        const low = url.toLowerCase();
+        if (low.includes("instagram.com")) {
+          label = "Follow on Instagram";
+          icon = ICONS.instagram;
+        } else if (low.includes("youtube.com") || low.includes("youtu.be")) {
+          label = "Watch on YouTube";
+          icon = ICONS.youtube;
+        } else if (low.includes("twitter.com") || low.includes("x.com")) {
+          label = "Follow on X / Twitter";
+        } else if (low.includes("facebook.com")) {
+          label = "Facebook Profile";
+        } else {
+          try {
+            const domain = new URL(url).hostname.replace("www.", "");
+            label = `Official ${domain}`;
+          } catch {
+            label = "Official Website";
+          }
+        }
+        stack.appendChild(createLinkBtn(label, url, icon, false));
+      });
+
+      // Upcoming Tour Dates
+      const events = p.events || [];
+      if (events.length) {
+        $("tour-section").style.display = "block";
+        const tourStack = $("tour-stack");
+        tourStack.innerHTML = "";
+        events.slice(0, 4).forEach(e => {
+          const item = document.createElement("div");
+          item.className = "tour-item";
+          const dateStr = e.start_date ? new Date(e.start_date) : new Date();
+          const day = dateStr.getDate() || "LIVE";
+          const mon = dateStr.toLocaleString('default', { month: 'short' }) || "TOUR";
+          item.innerHTML = `
+            <div style="display:flex; align-items:center; min-width:0">
+              <div class="tour-date-badge">
+                <span class="day">${day}</span>
+                <span class="mon">${mon}</span>
+              </div>
+              <div class="tour-info">
+                <div class="tour-city">${e.city || 'Upcoming Concert'}</div>
+                <div class="tour-venue">${e.title || 'Tour Showcase'}</div>
+              </div>
+            </div>
+            <a class="tour-btn" href="${e.venue_url || p.url}" target="_blank" rel="noopener">Tickets</a>
+          `;
+          tourStack.appendChild(item);
+        });
+      }
+
+      // Latest Releases / Discography
+      const albums = p.albums || [];
+      if (albums.length) {
+        $("disco-section").style.display = "block";
+        const discoGrid = $("disco-grid");
+        discoGrid.innerHTML = "";
+        albums.slice(0, 4).forEach(a => {
+          const card = document.createElement("a");
+          card.className = "disco-card";
+          card.href = a.url || p.url;
+          card.target = "_blank";
+          card.rel = "noopener";
+          card.innerHTML = `
+            <img class="disco-img" src="${a.image_url || p.image_url}" alt="${a.name}" onerror="this.src='${p.image_url}'" />
+            <div class="disco-name">${a.name}</div>
+            <div class="disco-year">${[a.type, a.year].filter(Boolean).join(" · ") || 'Album'}</div>
+          `;
+          discoGrid.appendChild(card);
+        });
+      }
+    }
+
+    function createLinkBtn(title, url, iconSvg, isFeatured) {
+      const a = document.createElement("a");
+      a.className = `smart-link-item ${isFeatured ? 'featured' : ''}`;
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.innerHTML = `
+        <div class="link-left">
+          <span class="link-icon">${iconSvg || ICONS.website}</span>
+          <span>${title}</span>
+        </div>
+        <span class="link-arrow">↗</span>
+      `;
+      return a;
+    }
+
+    // Audio Playback
+    function setupAudio(url) {
+      const audio = $("audio-el");
+      const playBtn = $("play-btn");
+      const playIcon = $("play-icon");
+      const pauseIcon = $("pause-icon");
+      const progressFill = $("progress-fill");
+      const timeLabel = $("time-label");
+      const scrubber = $("scrubber");
+
+      audio.src = url;
+
+      playBtn.addEventListener("click", () => {
+        if (audio.paused) {
+          audio.play();
+        } else {
+          audio.pause();
+        }
+      });
+
+      audio.addEventListener("play", () => {
+        playIcon.style.display = "none";
+        pauseIcon.style.display = "block";
+      });
+
+      audio.addEventListener("pause", () => {
+        playIcon.style.display = "block";
+        pauseIcon.style.display = "none";
+      });
+
+      audio.addEventListener("ended", () => {
+        playIcon.style.display = "block";
+        pauseIcon.style.display = "none";
+        progressFill.style.width = "0%";
+        timeLabel.textContent = "0:00";
+      });
+
+      audio.addEventListener("timeupdate", () => {
+        const cur = audio.currentTime;
+        const dur = audio.duration || 30;
+        const pct = (cur / dur) * 100;
+        progressFill.style.width = `${pct}%`;
+        const s = Math.floor(cur % 60);
+        timeLabel.textContent = `0:${s < 10 ? '0' : ''}${s}`;
+      });
+
+      scrubber.addEventListener("click", (ev) => {
+        const rect = scrubber.getBoundingClientRect();
+        const pos = (ev.clientX - rect.left) / rect.width;
+        audio.currentTime = pos * (audio.duration || 30);
+      });
+    }
+
+    // Interactive Controls
+    $("share-btn").addEventListener("click", () => {
+      navigator.clipboard.writeText(window.location.href);
+      showToast("Smart Link copied to clipboard!");
+    });
+
+    $("theme-btn").addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      showToast(document.body.classList.contains("dark") ? "Dark Poster Theme" : "Warm Blush Theme");
+    });
+
+    $("qr-btn").addEventListener("click", () => {
+      const currentUrl = encodeURIComponent(window.location.href);
+      $("qr-img").src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${currentUrl}`;
+      $("qr-modal").classList.add("active");
+    });
+
+    $("close-qr").addEventListener("click", () => {
+      $("qr-modal").classList.remove("active");
+    });
+
+    $("qr-modal").addEventListener("click", (e) => {
+      if (e.target === $("qr-modal")) $("qr-modal").classList.remove("active");
+    });
+
+    document.addEventListener("DOMContentLoaded", loadSmartLink);
+  </script>
+</body>
+</html>

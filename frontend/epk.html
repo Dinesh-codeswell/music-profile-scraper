@@ -607,6 +607,10 @@
       <span>Artist Import Studio</span>
     </a>
     <div class="epk-actions">
+      <a id="smart-link-btn" class="epk-btn" href="#" target="_blank" rel="noopener" title="Open Fan Smart Link &amp; Bio Hub" style="display:none">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        <span class="epk-btn-text">Smart Link ↗</span>
+      </a>
       <button id="copy-epk-btn" class="epk-btn" title="Copy public shareable EPK link">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         <span class="epk-btn-text">Share EPK</span>
@@ -979,6 +983,13 @@
 
       // Load interactive audience map and tour routing
       loadEPKMap(highlights.provider, highlights.id);
+
+      // Wire up Smart Link button
+      const smartBtn = $("smart-link-btn");
+      if (smartBtn && highlights.provider && highlights.id) {
+        smartBtn.href = `/link/${encodeURIComponent(highlights.provider)}/${encodeURIComponent(highlights.id)}`;
+        smartBtn.style.display = "inline-flex";
+      }
 
       // Show EPK view
       $("epk-loader").style.display = "none";

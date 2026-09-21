@@ -225,6 +225,11 @@ function render(p) {
     epkBtn.href = `/epk/${encodeURIComponent(p.provider)}/${encodeURIComponent(p.id)}`;
     epkBtn.style.display = "inline-flex";
   }
+  const smartlinkBtn = $("smartlink-btn");
+  if (smartlinkBtn) {
+    smartlinkBtn.href = `/link/${encodeURIComponent(p.provider)}/${encodeURIComponent(p.id)}`;
+    smartlinkBtn.style.display = "inline-flex";
+  }
 
   $("stats-list").closest(".section").style.display = p.availability.stats ? "" : "none";
 

@@ -430,6 +430,16 @@ if STATIC_DIR.exists():
             return FileResponse(embed_file)
         return FileResponse(STATIC_DIR / "index.html")
 
+    @app.get("/link", include_in_schema=False)
+    @app.get("/link/{provider}/{obj_id}", include_in_schema=False)
+    @app.get("/smart-link", include_in_schema=False)
+    @app.get("/smart-link/{provider}/{obj_id}", include_in_schema=False)
+    def smart_link_page(provider: Optional[str] = None, obj_id: Optional[str] = None) -> FileResponse:
+        link_file = STATIC_DIR / "link.html"
+        if link_file.exists():
+            return FileResponse(link_file)
+        return FileResponse(STATIC_DIR / "index.html")
+
     @app.get("/filter", include_in_schema=False)
     @app.get("/csv-filter", include_in_schema=False)
     @app.get("/filter-studio", include_in_schema=False)

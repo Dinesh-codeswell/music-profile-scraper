@@ -5,6 +5,10 @@
     { "source": "/csv-filter", "destination": "/filter.html" },
     { "source": "/filter-studio", "destination": "/filter.html" },
     { "source": "/epk/(.*)", "destination": "/epk.html" },
-    { "source": "/embed/(.*)", "destination": "/embed.html" }
+    { "source": "/embed/(.*)", "destination": "/embed.html" },
+    { "source": "/link", "destination": "/link.html" },
+    { "source": "/link/(.*)", "destination": "/link.html" },
+    { "source": "/smart-link", "destination": "/link.html" },
+    { "source": "/smart-link/(.*)", "destination": "/link.html" }
   ]
 }

@@ -119,5 +119,19 @@ class TestArtistImportStudioFeatures(unittest.TestCase):
         self.assertNotIn("Songdew", resp.text)
 
 
+    def test_smart_link_routes(self):
+        """Test /link and /smart-link serve the mobile-first smart link landing page."""
+        resp = self.client.get("/link/spotify/0tC995Rfn9k2l7nqgCZsV7")
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn("text/html", resp.headers["content-type"])
+        self.assertIn("Artist Smart Link", resp.text)
+        self.assertIn("preview-module", resp.text)
+        self.assertIn("tour-section", resp.text)
+
+        resp_alias = self.client.get("/smart-link/spotify/0tC995Rfn9k2l7nqgCZsV7")
+        self.assertEqual(resp_alias.status_code, 200)
+        self.assertIn("Artist Smart Link", resp_alias.text)
+
+
 if __name__ == "__main__":
     unittest.main()
