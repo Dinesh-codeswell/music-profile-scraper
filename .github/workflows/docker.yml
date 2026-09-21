@@ -1,0 +1,35 @@
+name: Docker Build & Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  docker-test:
+    name: Build & Verify Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: music-profile-scraper:test
+          load: true
+
+      - name: Verify Container Startup & Healthcheck
+        run: |
+          docker run -d --name test-container -p 8000:8000 music-profile-scraper:test
+          sleep 5
+          docker logs test-container
+          curl --fail --retry 3 --retry-delay 2 http://localhost:8000/api/health || exit 1
+          docker stop test-container

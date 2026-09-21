@@ -4,7 +4,12 @@
   "description": "Artist Import Studio — Spotify & Apple Music scraper and EPK preview dashboard",
   "scripts": {
     "dev": "uvicorn backend.app:app --reload --port 8000",
-    "start": "uvicorn backend.app:app --host 0.0.0.0 --port 8000"
+    "start": "uvicorn backend.app:app --host 0.0.0.0 --port 8000",
+    "docker:build": "docker build -t music-profile-scraper .",
+    "docker:up": "docker compose up -d",
+    "docker:dev": "docker compose -f docker-compose.dev.yml up",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
   },
   "keywords": [
     "music-tech",

@@ -1,0 +1,42 @@
+# Git & Version Control
+.git/
+.gitignore
+
+# Python byte code & environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Testing & Coverage
+.coverage
+.pytest_cache/
+htmlcov/
+tests/
+
+# Environment files & secrets
+.env
+.env.*
+!.env.example
+
+# IDE & Editor configs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Documentation / CI
+.github/
+render.yaml
+vercel.json

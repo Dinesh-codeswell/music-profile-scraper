@@ -2,6 +2,7 @@
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker&logoColor=white)](Dockerfile)
 [![MCP](https://img.shields.io/badge/MCP-Protocol%202024--11--05-blueviolet.svg)](https://modelcontextprotocol.io/)
 [![Vercel Ready](https://img.shields.io/badge/Vercel-Deployed-black.svg?logo=vercel&logoColor=white)](https://vercel.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -223,14 +224,57 @@ python -m unittest discover tests
 
 ## ☁️ Deployment
 
-### Option A: Deploy to Vercel (Recommended)
-This repository includes [`vercel.json`](vercel.json) and [`pyproject.toml`](pyproject.toml) pre-configured for Vercel's Python runtime.
+### Option A: Docker & Docker Compose (Recommended for Self-Hosting & Teams)
+
+The repository provides a production-grade multi-stage [`Dockerfile`](Dockerfile), an unprivileged non-root runtime environment (`appuser:10001`), native health checks, and Docker Compose configurations:
+
+#### 1. Production Quickstart (One Command)
+```bash
+docker compose up -d
+```
+The application will build, verify health checks, and start listening at **[http://localhost:8000](http://localhost:8000)**.
+
+To check logs or status:
+```bash
+docker compose logs -f
+docker compose ps
+```
+
+To stop:
+```bash
+docker compose down
+```
+
+#### 2. Development Mode with Live Hot-Reloading
+To mount local source files and enable instant auto-reload when code changes:
+```bash
+docker compose -f docker-compose.dev.yml up
+```
+
+#### 3. Standalone Docker CLI
+```bash
+# Build the optimized production image
+docker build -t music-profile-scraper .
+
+# Run container with port forwarding and health checks
+docker run -d --name music-profile-scraper -p 8000:8000 music-profile-scraper
+
+# Verify health check status
+docker inspect --format='{{json .State.Health}}' music-profile-scraper
+```
+
+---
+
+### Option B: Deploy to Vercel (Edge CDN + Serverless Functions)
+This repository includes [`vercel.json`](vercel.json) and [`pyproject.toml`](pyproject.toml) pre-configured for Vercel:
 
 1. Push your project to GitHub.
 2. Import your repository at **[vercel.com/new](https://vercel.com/new)**.
 3. Vercel automatically deploys the static frontend to its global Edge CDN and the FastAPI backend as Serverless Python Functions.
 
-### Option B: Deploy to Render
+---
+
+### Option C: Deploy to Render
 The repository includes a [`render.yaml`](render.yaml) blueprint for one-click web service deployment using `uvicorn backend.app:app`.
 
 ---
